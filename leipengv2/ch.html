@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>个人专属</title>
+	<style>
+		*{
+			padding: 0;
+			margin: 0;
+		}
+		body{
+			background: #a6a69e;
+		}
+		.container{
+			max-width: 800px;
+			margin: 0 auto;
+		}
+		.header{
+			margin-top: 50px;
+			margin-bottom: 20px;
+			text-align: center
+		}
+		.header img{
+			-webkit-border-radius: 100% ;
+					border-radius: 100% ;
+			box-shadow: 0 0 20px 4px -webkit-rgba(0,0,0,.3); 
+			box-shadow: 0 0 20px 4px rgba(0,0,0,.3); 
+		}
+		.header .ani{
+			-webkit-animation: circle 10s 1.3s linear infinite;
+					animation: circle 10s 1.3s linear infinite;
+		}
+		.content{
+			padding: 20px;
+		}
+		.content p{
+			font-family: 'Microsoft Yahei';
+			font-weight: bolder;
+			padding: 10px;
+			color: #f5f5f5;
+		}
+		.header .ani.stop {
+		    -webkit-animation-play-state: paused;
+		    		animation-play-state: paused;
+		}
+		@-webkit-keyframes circle{
+			from{
+				transform: rotate(0deg);
+			}
+			to{
+				transform: rotate(360deg);
+			}
+		}
+		@keyframes circle{
+			from{
+				transform: rotate(0deg);
+			}
+			to{
+				transform: rotate(360deg);
+			}
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="header">
+			<img src="imgv2/img1.jpg" alt="girl" width=50%;>
+		</div>
+		
+		<div class="content">
+			<!-- <p>最近我认识了一个女孩</p>			
+			<p>虽然我还不知道她的名字</p>
+			<p>虽然我们才相识了不到一个星期</p>
+			<p>虽然我们只通过一次电话</p>
+			<p>但却像是相识了多年的朋友</p>
+			<p>也许这就是传说中的冥冥之中自有安排?</p>
+			<p>她有一双明亮的大眼睛 深深的吸引了我</p>
+			<p>她的笑，带着和我一样的孩子气，在阳光灿烂及如阳光一般的笑容中</p>
+			<p>如果你的美丽是上天送给你的最好的礼物的话，那么让我遇见你就是上天对我的最好的恩赐。期待着和你的不期而遇 </p> -->
+		</div>
+	</div>
+	<audio src="http://music.163.com/song/media/outer/url?id=28234970.mp3" autoplay="true" loop="true"></audio>
+
+	<script src="typed.min.js"></script>
+	<script>
+		window.onload = function(){
+			var img = document.querySelector('.header img');
+			var audio = document.querySelector('audio');
+			var flag = true;
+			img.className = 'ani';
+
+			/*打字机*/
+			Typed.new(".content", {
+				strings: ["<p>闭月羞花，沉鱼落雁，</p>^200 <p>天女下凡,知书达理,</p> ^200 <p>温柔贤惠，小鸟伊人,</p> ^200 <p>翩若惊鸿，貌若仙子,</p><p>温柔可人,粉妆玉琢,</p><p>倾国倾城 国色天香,</p><p>水芙蓉 天生丽质 美丽动人如你</p><p></p>"],
+				typeSpeed: 180,
+				contentType: 'html'
+			});
+
+			/*播放/暂停*/
+			img.addEventListener('touchstart',touch,false);
+			img.addEventListener('touchend',touch,false);
+			function touch(e){
+				var e = e || window.event;
+				switch(e.type){
+					case "touchstart":
+						var random = Math.floor(Math.random()*8+1);
+						if (flag) {
+							flag = !flag;
+							img.classList.add('stop');
+							img.src = "imgv2/img"+random+".jpg";
+							audio.pause();
+						}else{
+							flag = !flag;
+							img.classList.remove('stop');
+							img.src = "img/img"+random+".jpg";
+							audio.play();
+						}
+						break;
+					// case "touchend":
+					// 	img.classList.remove('stop');
+					// 	audio.play();
+					// 	break;
+				}
+			}
+
+		}
+	</script>
+</body>
+</html>
