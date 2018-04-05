@@ -103,15 +103,15 @@
 				var e = e || window.event;
 				switch(e.type){
 					case "touchstart":
-						var random = Math.floor(Math.random()*8+1);
+						var random = Math.floor(Math.random()*4+1);
 						if (flag) {
 							flag = !flag;
-							img.classList.add('stop');
+							//img.classList.add('stop');
 							img.src = "imgv2/m"+random+".jpg";
 							audio.pause();
 						}else{
 							flag = !flag;
-							img.classList.remove('stop');
+							//img.classList.remove('stop');
 							img.src = "imgv2/m"+random+".jpg";
 							audio.play();
 						}
