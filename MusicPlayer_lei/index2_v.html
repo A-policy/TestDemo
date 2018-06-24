@@ -42,6 +42,14 @@
     <img data-src="img/min/img2.jpg" alt="" style="display: none">
     <img data-src="img/min/img3.jpg" alt="" style="display: none">
     <img data-src="img/min/img4.jpg" alt="" style="display: none">
+    <img data-src="img/min/img5.jpg" alt="" style="display: none">
+    <img data-src="img/min/img6.jpg" alt="" style="display: none">
+    <img data-src="img/min/img7.jpg" alt="" style="display: none">
+    <img data-src="img/min/img8.jpg" alt="" style="display: none">
+    <img data-src="img/min/img9.jpg" alt="" style="display: none">
+    <img data-src="img/min/img10.jpg" alt="" style="display: none">
+    <img data-src="img/min/img11.jpg" alt="" style="display: none">
+    <img data-src="img/min/img12.jpg" alt="" style="display: none">
     <script src="js/zepto.min.js"></script>
     <script src="js/touch.js"></script>
     <script src="js/event.js"></script>
@@ -214,7 +222,7 @@
         var arr = ptn.exec(imgUrl);
         var imgName = arr[0];
         var imgNum = imgName.split('.')[0].split('img')[1];
-        if (imgNum == 4) imgNum = 0;
+        if (imgNum == 12) imgNum = 0;
         imgNum++;
         imger.style.backgroundImage = 'url(./img/min/img' + imgNum + '.jpg)';
         imgblur.style.backgroundImage = 'url(./img/min/img' + imgNum + '.jpg)';
@@ -255,7 +263,7 @@
         var arr = ptn.exec(imgUrl);
         var imgName = arr[0];
         var imgNum = imgName.split('.')[0].split('img')[1];
-        if (imgNum == 1) imgNum = 4;
+        if (imgNum == 1) imgNum = 12;
         imgNum--;
         imger.style.backgroundImage = 'url(./img/min/img' + imgNum + '.jpg)';
         imgblur.style.backgroundImage = 'url(./img/min/img' + imgNum + '.jpg)';
