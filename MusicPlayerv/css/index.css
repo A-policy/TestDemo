@@ -24,8 +24,8 @@ body {
 }
 
 #ulcontainer {
-    height: -webkit-calc(100vh - 60vw - 15rem);
-    height: calc(100vh - 60vw - 15rem); /*9-15*/
+    height: -webkit-calc(100vh - 60vw - 10rem);
+    height: calc(100vh - 60vw - 10rem); /*9-15*/
     overflow-x: hidden;
     overflow-y: scroll;
 }
