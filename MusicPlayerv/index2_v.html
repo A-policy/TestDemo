@@ -46,6 +46,7 @@
     <script src="js/zepto.min.js"></script>
     <script src="js/touch.js"></script>
     <script src="js/event.js"></script>
+    <script src="js/wx.js"></script>
     <script>
     var audio, lyricContainer, lyric;
     var title = document.querySelector('h1>span');
@@ -183,7 +184,8 @@
     }
 
     function turnSong() {
-        $(lyricContainer).trigger('swipeLeft');
+        //$(lyricContainer).trigger('swipeLeft');
+        forward.trigger('tap');
     }
 
     // $(lyricContainer).swipeLeft(function() {
@@ -223,7 +225,8 @@
         if (isWX) {
             setTimeout(function() {
                 imger.classList.add('ani');
-                audio.play();
+                //audio.play();
+                 autoPlayAudio();
             }, 400)
         }
     })
@@ -264,7 +267,8 @@
         if (isWX) {
             setTimeout(function() {
                 imger.classList.add('ani');
-                audio.play();
+                //audio.play();
+                 autoPlayAudio();
             }, 400)
         }
     })
@@ -292,6 +296,22 @@
         getTitle(songIds[rad]);
         getLrc(songIds[rad]);
     }
+        
+    function autoPlayAudio() {
+        wx.config({
+            // 配置信息, 即使不正确也能使用 wx.ready
+            debug: false,
+            appId: '',
+            timestamp: 1,
+            nonceStr: '',
+            signature: '',
+            jsApiList: []
+        });
+        wx.ready(function() {
+            audio.play();
+        });
+    }
+        
     </script>
 </body>
 
