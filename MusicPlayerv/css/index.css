@@ -64,7 +64,7 @@ ul li {
     box-sizing: border-box;
     overflow: hidden;
     border-radius: 50%;
-    /*background-image: url('../img/min/img1.jpg');*/
+    background-image: url('../img/min/img1.jpg');
     background-size: 100%;
     background-position: center top;
     transition: background .4s;
