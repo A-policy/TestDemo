@@ -147,9 +147,11 @@
         $.get('https://api.imjad.cn/cloudmusic/', request, function(data) {
             parseLyric(data.lrc.lyric);
             var ul = document.createElement('ul');
+            console.log(lyric);
             lyric.forEach(function(e, i) {
                 var li = document.createElement('li');
-                li.textContent = e[1];
+                //li.textContent = e[1];
+                li.innerHTML = e[1]+"&nbsp;";
                 ul.append(li);
             })
             document.querySelector('#ulcontainer').innerHTML = '';
