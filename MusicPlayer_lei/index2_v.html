@@ -231,13 +231,14 @@
         imger.style.backgroundImage = 'url(./img/min/img' + imgNum + '.jpg)';
         imgblur.style.backgroundImage = 'url(./img/min/img' + imgNum + '.jpg)';
         init();
-        if (isWX) autoPlayAudio();
-        //if (isWX) {
-        //    setTimeout(function() {
-        //        imger.classList.add('ani');
-        //        audio.play();
-        //    }, 400)
-        //}
+        //if (isWX) autoPlayAudio();
+        if (isWX) {
+            setTimeout(function() {
+                imger.classList.add('ani');
+                //audio.play();
+                autoPlayAudio();
+            }, 400)
+        }
     })
 
 
