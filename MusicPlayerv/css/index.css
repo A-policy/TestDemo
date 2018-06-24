@@ -15,7 +15,7 @@ body {
 }
 
 #container {
-    height: 70%;
+    height: 100%;
     box-sizing: border-box;
     overflow: hidden;
     text-align: center;
@@ -206,7 +206,7 @@ ul li {
 }
 
 .foot span:nth-child(2){
-    margin: 10px 10px 0;
+    margin: 30px 10px 0;
 }
 
 dot {
