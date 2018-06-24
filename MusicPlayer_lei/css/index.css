@@ -24,14 +24,15 @@ body {
 }
 
 #ulcontainer {
-    height: -webkit-calc(100vh - 60vw - 15rem);
-    height: calc(100vh - 60vw - 15rem); /*9-15*/
+    height: -webkit-calc(100vh - 60vw - 10rem);
+    height: calc(100vh - 60vw - 10rem); /*9-15*/
     overflow-x: hidden;
     overflow-y: scroll;
 }
 #container>h1{
     /*line-height: 4rem;*/
     /*margin: 0;*/
+    font-size:1.2rem;
 }
 #container>h1 span{
     letter-spacing: .4rem
@@ -51,8 +52,8 @@ ul li {
 
 .picker {
     position: relative;
-    width: 60%;
-    height: 60vw;
+    width: 50%;
+    height: 50vw;
     font-size: 0;
     margin: 2rem auto;/
     /*margin: 0 auto 1rem auto;*/
@@ -137,8 +138,8 @@ ul li {
 
 .btn {
     display: inline-block;
-    width: 80px;
-    height: 80px;
+    width: 40px;
+    height: 40px;
     /*border: 10px solid;*/
     border-radius: 100%;
     color: #ff9b00;
@@ -205,7 +206,7 @@ ul li {
 }
 
 .foot span:nth-child(2){
-    margin: 20px 20px 0;
+    margin: 50px 10px 0;
 }
 
 dot {
