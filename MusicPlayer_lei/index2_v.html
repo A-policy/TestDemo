@@ -25,6 +25,7 @@
             <div class="foot">
                 <span class="btn forward back"></span>
                 <span class="btn start"></span>
+                //<span class="btn play"></span>
                 <span class="btn forward"></span>
             </div>
         </footer>
@@ -64,6 +65,7 @@
     var imgblur = document.querySelector('.imgblur');
     var back = $('.forward.back');
     var play = $('.start');
+    //var play = $('.start')[0] == undefined ? $('.play') : $('.start');
     var forward = $('.forward');
 
     var flag = true;
@@ -191,7 +193,8 @@
     }
 
     function turnSong() {
-        $(lyricContainer).trigger('swipeLeft');
+        //$(lyricContainer).trigger('swipeLeft');
+        forward.trigger('swipeLeft');
     }
 
     // $(lyricContainer).swipeLeft(function() {
