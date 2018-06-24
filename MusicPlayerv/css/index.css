@@ -32,6 +32,7 @@ body {
 #container>h1{
     /*line-height: 4rem;*/
     /*margin: 0;*/
+    font-size:1.2rem;
 }
 #container>h1 span{
     letter-spacing: .4rem
