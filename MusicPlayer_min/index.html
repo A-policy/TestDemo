@@ -45,6 +45,7 @@
     <img data-src="img/min/img5.jpg" alt="" style="display: none">
     <img data-src="img/min/img6.jpg" alt="" style="display: none">
     <img data-src="img/min/img7.jpg" alt="" style="display: none">
+    <img data-src="img/min/img8.jpg" alt="" style="display: none">
     <script src="js/zepto.min.js"></script>
     <script src="js/touch.js"></script>
     <script src="js/event.js"></script>
@@ -91,8 +92,8 @@
                     $('ul li').removeClass('actived');
                     var li = $('ul li').eq(i);
                     li.addClass('actived');
-                    if (i > 7) {
-                        $('ul li').get(0).style.marginTop = -(i - 7) * 2 + 'em';
+                    if (i > 8) {
+                        $('ul li').get(0).style.marginTop = -(i - 8) * 2 + 'em';
                     }
                 };
             };
@@ -219,7 +220,7 @@
         var arr = ptn.exec(imgUrl);
         var imgName = arr[0];
         var imgNum = imgName.split('.')[0].split('img')[1];
-        if (imgNum == 7) imgNum = 0;
+        if (imgNum == 8) imgNum = 0;
         imgNum++;
         imger.style.backgroundImage = 'url(./img/min/img' + imgNum + '.jpg)';
         imgblur.style.backgroundImage = 'url(./img/min/img' + imgNum + '.jpg)';
@@ -261,7 +262,7 @@
         var arr = ptn.exec(imgUrl);
         var imgName = arr[0];
         var imgNum = imgName.split('.')[0].split('img')[1];
-        if (imgNum == 1) imgNum = 7;
+        if (imgNum == 1) imgNum = 8;
         imgNum--;
         imger.style.backgroundImage = 'url(./img/min/img' + imgNum + '.jpg)';
         imgblur.style.backgroundImage = 'url(./img/min/img' + imgNum + '.jpg)';
