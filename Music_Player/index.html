@@ -1,0 +1,320 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
+    <title>专属</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/normalize/6.0.0/normalize.min.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/index.css">
+</head>
+
+<body>
+    <audio hidden></audio>
+    <div id="container">
+        <h1>&nbsp;<span></span>&nbsp;</h1>
+        <div class="picker">
+            <div class="imger">
+            </div>
+        </div>
+        <div id="ulcontainer">
+            <ul></ul>
+        </div>
+        <footer>
+            <div class="foot">
+                <span class="btn forward back"></span>
+                <span class="btn start"></span>
+                <span class="btn forward"></span>
+            </div>
+        </footer>
+    </div>
+    <div class="mask-container">
+        <div class="mask">
+            <span>正在加载</span>
+            <dot>...</dot>
+        </div>
+    </div>
+    <div class="imger-mask">图片蒙层 微信浏览器无法自动播放 需手动触发</div>
+    <div class="imgblur"></div>
+
+    <img src="img/min/img1.jpg" alt="" style="display: none">
+    <img data-src="img/min/img2.jpg" alt="" style="display: none">
+    <img data-src="img/min/img3.jpg" alt="" style="display: none">
+    <img data-src="img/min/img4.jpg" alt="" style="display: none">
+    <img data-src="img/min/img5.jpg" alt="" style="display: none">
+    <img data-src="img/min/img6.jpg" alt="" style="display: none">
+    <img data-src="img/min/img7.jpg" alt="" style="display: none">
+    <script src="js/zepto.min.js"></script>
+    <script src="js/touch.js"></script>
+    <script src="js/event.js"></script>
+    <script src="js/wx.js"></script>
+    <script>
+    var audio, lyricContainer, lyric;
+    var title = document.querySelector('h1>span');
+    var mask = document.querySelector('.mask-container');
+    lyricContainer = document.querySelector('#container');
+    var picker = document.querySelector('.picker');
+    var imger = document.querySelector('.imger');
+    var imgblur = document.querySelector('.imgblur');
+    var back = $('.forward.back');
+    var play = $('.start');
+    var forward = $('.forward');
+
+    var flag = true;
+    var isWX = false;
+    var songIds = ['208902', '296837', '569214126', '1345848098', '518781004', '574566207', '449818741' , '557581284', '531295576', '29004400', '523251118', '569214126'];
+
+    window.onload = function() {
+        mask.style.display = "none"; //loading 动画隐藏
+        /*微信浏览器处理*/
+        var ua = window.navigator.userAgent.toLowerCase();
+        var isIos = /(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent);
+        if (ua.match(/MicroMessenger/i) == 'micromessenger') {
+            flag = false;
+            isWX = true;
+            // document.querySelector('.imger-mask').style.display = 'block';
+            $('.imger-mask').tap(function() {
+                document.querySelector('.imger-mask').style.display = 'none';
+                // $(imger).trigger('tap');
+                play.trigger('tap');
+            })
+        }
+
+        audio = document.querySelector('audio'); //获取页面上的audio标签
+        init();
+        loadImages(); //加载预留图片
+
+        audio.ontimeupdate = function(e) {
+            for (var i = 0, l = lyric.length; i < l; i++) {
+                if (parseInt(this.currentTime) == parseInt(lyric[i][0])) {
+                    $('ul li').removeClass('actived');
+                    var li = $('ul li').eq(i);
+                    li.addClass('actived');
+                    if (i > 7) {
+                        $('ul li').get(0).style.marginTop = -(i - 7) * 2 + 'em';
+                    }
+                };
+            };
+        };
+        audio.addEventListener('canplay', function() {
+            if (isWX) return;
+            setTimeout(function() {
+                imger.classList.add('ani');
+                play.removeClass('start').addClass('play');
+                audio.play();
+            }, 400)
+        });
+        audio.addEventListener('ended', turnSong); //播放结束自动切换
+    }
+
+    function parseLyric(text) {
+        //将文本分隔成一行一行，存入数组
+        var lines = text.split('\n'),
+            //用于匹配时间的正则表达式，匹配的结果类似[xx:xx.xx]
+            pattern = /\[\d{2}:\d{2}.\d{2,4}\]/g,
+            pattern2 = /[\u4e00-\u9fa5]+/g,
+            //保存最终结果的数组
+            result = [];
+        //去掉不含时间的行
+        while (!pattern.test(lines[0])) {
+            lines = lines.slice(1);
+        };
+        //上面用'\n'生成生成数组时，结果中最后一个为空元素，这里将去掉  
+        lines[lines.length - 1].length === 0 && lines.pop();
+        lines.forEach(function(v, i, a) {
+            //提取出时间[xx:xx.xx]
+            var time = v.match(pattern),
+                //提取歌词
+                value = v.replace(pattern, '');
+            //因为一行里面可能有多个时间，所以time有可能是[xx:xx.xx][xx:xx.xx][xx:xx.xx]的形式，需要进一步分隔
+            time.forEach(function(v1, i1, a1) {
+                //去掉时间里的中括号得到xx:xx.xx
+                var t = v1.slice(1, -1).split(':');
+                //将结果压入最终数组
+                result.push([parseInt(t[0], 10) * 60 + parseFloat(t[1]), value]);
+            });
+        });
+        //最后将结果数组中的元素按时间大小排序，以便保存之后正常显示歌词
+        result.sort(function(a, b) {
+            return a[0] - b[0];
+        });
+        lyric = result;
+        return result;
+    }
+
+    function getLrc(id) {
+        var request = {
+            type: 'lyric',
+            id: id
+        };
+        $.get('https://api.imjad.cn/cloudmusic/', request, function(data) {
+            parseLyric(data.lrc.lyric);
+            var ul = document.createElement('ul');
+            console.log(lyric);
+            lyric.forEach(function(e, i) {
+                var li = document.createElement('li');
+                //li.textContent = e[1];
+                li.innerHTML = e[1]+"&nbsp;";
+                ul.append(li);
+            })
+            document.querySelector('#ulcontainer').innerHTML = '';
+            document.querySelector('#ulcontainer').append(ul);
+        })
+    }
+
+    function getTitle(id) {
+        var request = {
+            type: 'detail',
+            id: id
+        };
+        $.get('https://api.imjad.cn/cloudmusic/', request, function(data) {
+            title.textContent = data.songs[0].name
+        })
+    }
+
+    function parseAudioSrc(id) {
+        return 'http://music.163.com/song/media/outer/url?id=' + id + '.mp3'
+    }
+
+    function loadImages() {
+        let images = document.querySelectorAll('img+img');
+        Array.prototype.forEach.call(images, function(el, i) {
+            var imgSrc = el.getAttribute('data-src');
+            el.src = imgSrc;
+        })
+    }
+
+    function turnSong() {
+        //$(lyricContainer).trigger('swipeLeft');
+        forward.trigger('tap');
+    }
+
+    // $(lyricContainer).swipeLeft(function() {
+    //     imger.classList.remove('ani');
+    //     var imgUrl = window.getComputedStyle(imger).backgroundImage;
+    //     var ptn = /(\w)+\.jpg/g;
+    //     var arr = ptn.exec(imgUrl);
+    //     var imgName = arr[0];
+    //     var imgNum = imgName.split('.')[0].split('img')[1];
+    //     if (imgNum == 7) imgNum = 0;
+    //     imgNum++;
+    //     imger.style.backgroundImage = 'url(./img/min/img' + imgNum + '.jpg)';
+    //     imgblur.style.backgroundImage = 'url(./img/min/img' + imgNum + '.jpg)';
+    //     init();
+    //     if (isWX) {
+    //         setTimeout(function() {
+    //             imger.classList.add('ani');
+    //             audio.play();
+    //         }, 400)
+    //     }
+    // })
+
+
+    forward.tap(function(){
+        console.log('tap');
+        imger.classList.remove('ani');
+        var imgUrl = window.getComputedStyle(imger).backgroundImage;
+        var ptn = /(\w)+\.jpg/g;
+        var arr = ptn.exec(imgUrl);
+        var imgName = arr[0];
+        var imgNum = imgName.split('.')[0].split('img')[1];
+        if (imgNum == 7) imgNum = 0;
+        imgNum++;
+        imger.style.backgroundImage = 'url(./img/min/img' + imgNum + '.jpg)';
+        imgblur.style.backgroundImage = 'url(./img/min/img' + imgNum + '.jpg)';
+        init();
+        if (isWX) {
+            setTimeout(function() {
+                imger.classList.add('ani');
+                //audio.play();
+                 autoPlayAudio();
+            }, 400)
+        }
+    })
+
+
+    // $(lyricContainer).swipeRight(function() {
+    //     imger.classList.remove('ani');
+    //     var imgUrl = window.getComputedStyle(imger).backgroundImage;
+    //     var ptn = /(\w)+\.jpg/g;
+    //     var arr = ptn.exec(imgUrl);
+    //     var imgName = arr[0];
+    //     var imgNum = imgName.split('.')[0].split('img')[1];
+    //     if (imgNum == 1) imgNum = 7;
+    //     imgNum--;
+    //     imger.style.backgroundImage = 'url(./img/min/img' + imgNum + '.jpg)';
+    //     imgblur.style.backgroundImage = 'url(./img/min/img' + imgNum + '.jpg)';
+    //     init();
+    //     if (isWX) {
+    //         setTimeout(function() {
+    //             imger.classList.add('ani');
+    //             audio.play();
+    //         }, 400)
+    //     }
+    // })
+
+    back.tap(function(){
+        imger.classList.remove('ani');
+        var imgUrl = window.getComputedStyle(imger).backgroundImage;
+        var ptn = /(\w)+\.jpg/g;
+        var arr = ptn.exec(imgUrl);
+        var imgName = arr[0];
+        var imgNum = imgName.split('.')[0].split('img')[1];
+        if (imgNum == 1) imgNum = 7;
+        imgNum--;
+        imger.style.backgroundImage = 'url(./img/min/img' + imgNum + '.jpg)';
+        imgblur.style.backgroundImage = 'url(./img/min/img' + imgNum + '.jpg)';
+        init();
+        if (isWX) {
+            setTimeout(function() {
+                imger.classList.add('ani');
+                //audio.play();
+                autoPlayAudio();
+            }, 400)
+        }
+    })
+
+    play.tap(function(e) {
+        if (flag) {
+            flag = !flag;
+            audio.pause();
+            var iTransform = getComputedStyle(imger).transform;
+            var cTransform = getComputedStyle(picker).transform;
+            picker.style.transform = cTransform === 'none' ? iTransform : iTransform.concat(' ', cTransform);
+            imger.classList.remove('ani');
+            play.removeClass('play').addClass('start');
+        } else {
+            flag = !flag;
+            imger.classList.add('ani');
+            audio.play();
+            play.removeClass('start').addClass('play');
+        }
+    })
+
+    function init() {
+        let rad = parseInt(Math.random() * songIds.length);
+        audio.src = parseAudioSrc(songIds[rad]);
+        getTitle(songIds[rad]);
+        getLrc(songIds[rad]);
+    }
+        
+    function autoPlayAudio() {
+        wx.config({
+            // 配置信息, 即使不正确也能使用 wx.ready
+            debug: false,
+            appId: '',
+            timestamp: 1,
+            nonceStr: '',
+            signature: '',
+            jsApiList: []
+        });
+        wx.ready(function() {
+            audio.play();
+        });
+    }
+        
+    </script>
+</body>
+
+</html>
